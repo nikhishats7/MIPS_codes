@@ -1,0 +1,844 @@
+1)
+
+#multiple
+.text
+.globl main
+
+main:
+li $v0, 4
+la $a0, msg1
+syscall
+
+li $v0, 5
+syscall
+move $t0, $v0
+
+li $v0, 4
+la $a0, msg2
+syscall
+
+li $v0, 5
+syscall
+move $t1, $v0
+
+div $t0, $t1
+mfhi $t2
+
+beq $t2, 0, multiple
+
+li $v0, 4
+la $a0, msg3
+syscall
+j end
+
+multiple:
+li $v0, 4
+la $a0, msg4
+syscall
+
+end:
+li $v0, 10
+syscall
+
+.data
+msg1: .asciiz "enter firsr num"
+msg2: .asciiz "enter second num"
+msg3: .asciiz "not a multiple"
+msg4: .asciiz "multiple"
+
+
+
+2)
+
+#sum of even
+.text
+.globl main
+
+main:
+li $v0, 4
+la $a0, msg1
+syscall
+
+li $v0, 5
+syscall
+move $t0, $v0
+
+move $t1, $0
+move $t2, $0 #sum
+
+adding:
+add $t2, $t2, $t1
+addi $t1, $t1, 2
+slt $t3, $t0, $t1
+beq $t3, $0, adding
+j end
+
+end:
+li $v0, 1
+move $a0, $t2
+syscall
+
+li $v0, 10
+syscall
+
+.data
+msg1: .asciiz "enter firsr num"
+msg2: .asciiz "enter second num"
+msg3: .asciiz "not a multiple"
+msg4: .asciiz "multiple"
+
+3)
+#check prime
+.text
+.globl main
+
+main:
+li $v0, 4
+la $a0, msg1
+syscall
+
+li $v0, 5
+syscall
+move $t0, $v0
+
+li $t1, 2
+check_prime:
+div $t0, $t1
+mfhi $t2
+beq $t2, $0, not_prime
+addi $t1, $t1, 1
+slt $t3, $t1, $t0
+beq $t3, $0, prime
+j check_prime
+
+prime:
+li $v0, 4
+la $a0, msg2
+syscall
+j end
+
+not_prime:
+li $v0, 4
+la $a0, msg3
+syscall
+
+end:
+li $v0, 10
+syscall
+
+.data
+msg1: .asciiz "enter first num"
+msg2: .asciiz "prime"
+msg3: .asciiz "not a prime"
+msg4: .asciiz "multiple"
+
+
+4)
+#find_highest
+
+.text
+.globl main
+
+main:
+li $v0, 4
+la $a0, msg1
+syscall
+
+li $v0, 5
+syscall
+move $t0, $v0 #size
+
+li $t1, 0 #max
+read:
+li $v0, 5
+syscall
+move $t2, $v0
+slt $t3, $t2, $t1
+beq $t3, $0, max
+
+f1:
+addi $t0, $t0, -1
+beq $t0, $0, end
+j read
+
+max:
+move $t1, $t2
+j f1
+
+end:
+li $v0, 1
+move $a0, $t1
+syscall
+
+li $v0, 10
+syscall
+
+.data
+msg1: .asciiz "enter first num"
+msg2: .asciiz "prime"
+msg3: .asciiz "not a prime"
+msg4: .asciiz "multiple"
+
+
+5)
+square and cube
+
+
+.text
+.globl main
+
+main:
+li $v0, 4
+la $a0, msg1
+syscall
+
+li $v0, 5
+syscall
+move $t0, $v0
+
+mult $t0, $t0
+mflo $t0
+
+li $v0, 1
+move $a0, $t0
+syscall
+
+li $v0, 4
+la $a0, newline
+syscall
+
+mult $t0, $t0
+mflo $t0
+
+li $v0, 1
+move $a0, $t0
+syscall
+
+li $v0, 4
+la $a0, newline
+syscall
+
+li $v0, 10
+syscall
+
+.data
+
+msg1: .asciiz "enter"
+newline: .asciiz "\n"
+
+
+
+
+6)
+
+#mean
+.text
+.globl main
+
+main:
+li $v0, 4
+la $a0, msg1
+syscall
+
+li $v0, 5
+syscall
+move $t0, $v0
+move $t3, $t0
+
+li $t2, 0  #sum
+adding:
+li $v0, 5
+syscall 
+move $t1, $v0
+add $t2, $t2, $t1
+
+addi $t0, $t0, -1
+beq $t0, $0, divide
+j adding
+
+divide:
+div $t2, $t3
+mflo $t4
+
+li $v0, 1
+move $a0, $t4
+syscall
+
+li $v0, 10
+syscall
+
+.data
+
+msg1: .asciiz "enter"
+
+7)
+#od  and even using array
+
+.text
+.globl main
+
+main:
+
+li $v0, 5
+syscall
+move $t0, $v0
+move $t5, $t0
+move $t6, $t0
+
+addi $t1, $0, 0
+
+read:
+li $v0, 5
+syscall
+move $t2, $v0
+sw $t2, array($t1)
+addi $t1, $t1, 4
+
+sub $t0, $t0, 1
+beq $t0, $0, end
+j read
+
+end:
+
+addi $t1, $0, 0
+
+print:
+
+lw $t2, array($t1)
+li $v0, 1
+move $a0, $t2
+syscall
+
+li $v0, 4
+la $a0, newline
+syscall
+
+addi $t1, $t1, 4
+
+sub $t5, $t5, 1
+beq $t5, $0, end1
+j print
+
+
+end1:
+addi $t5, $0, 2
+li $t0, 0 #even
+li $t1, 0 #odd
+addi $t2, $0, 0
+check:
+lw $t3, array($t2)
+div $t3, $t5
+mfhi $t4
+li $v0, 1
+move $a0, $t3
+syscall
+li $v0, 1
+move $a0, $t4
+syscall
+beq $t4, $0, even
+addi $t1, $t1, 1
+j f
+even:
+addi $t0, $t0, 1
+f:
+addi $t2, $t2, 4
+addi $t6, $t6,  -1
+beq $t6, $0, end2
+j check
+
+end2:
+
+li $v0, 1
+move $a0, $t0
+syscall
+
+li $v0, 1
+move $a0, $t1
+syscall
+li $v0, 10
+syscall
+
+.data
+array: .space 40
+newline:   .asciiz	"\n" 
+
+8)
+#search in array
+
+
+.text
+.globl main
+
+main:
+li $v0, 4
+la $a0, msg1
+syscall
+
+li $v0, 5
+syscall 
+move $t0, $v0   #array len
+
+li $t1, 4
+mult $t0, $t1
+mflo $t8               #array size
+
+addi $t1, $0, 0
+read:
+li $v0, 5
+syscall
+move $t2, $v0
+sw $t2, array($t1)
+addi $t1, $t1, 4
+beq $t1, $t8, next1
+j read
+
+next1:
+
+li $v0, 5
+syscall 
+move $t1, $v0         #key
+
+addi $t2, $0, 0
+search:
+lw $t3, array($t2)
+beq $t3, $t1, found
+addi $t2, $t2, 4
+beq $t2, $t8, notfound
+j search
+
+notfound:
+li $v0, 4
+la $a0, msg3
+syscall
+j end
+
+found:
+li $v0, 4
+la $a0, msg2
+syscall
+
+end:
+li $v0, 10
+syscall
+
+.data
+array: .space 40
+msg1: .asciiz "enter"
+msg2: .asciiz "found"
+msg3: .asciiz "not found"
+newline:   .asciiz	"\n"
+
+9)
+#high and low
+
+
+.text
+.globl main
+
+main:
+li $v0, 4
+la $a0, msg1
+syscall
+
+li $v0, 5
+syscall
+move $t0, $v0    #arraylen
+
+li $t1, 4
+mult $t0, $t1
+mflo $t8             #array size
+
+addi $t1, $0, 0
+read:
+li $v0, 5
+syscall
+move $t2, $v0
+sw $t2, array($t1)
+addi $t1, $t1, 4
+beq $t1, $t8, next1
+j read
+
+next1:
+li $t1, 0 #high
+li $t2, 100 #low
+addi $t3, $0, 0
+comp:
+lw $t4, array($t3)
+slt $t5, $t4, $t1
+beq $t5, $0, high
+
+f1:
+slt $t6, $t2, $t4
+beq $t6, $0, low
+j f2
+
+high:
+move $t1, $t4
+j f1
+
+low:
+move $t2, $t4
+
+f2:
+addi $t3, $t3, 4
+beq $t3, $t8, end
+j comp
+
+end:
+li $v0, 1
+move $a0, $t1
+syscall
+
+li $v0, 4
+la $a0, newline
+syscall
+
+li $v0, 1
+move $a0, $t2
+syscall
+
+li $v0, 10
+syscall
+
+.data
+array: .space 40
+msg1: .asciiz "enter"
+msg2: .asciiz "found"
+msg3: .asciiz "not found"
+newline:   .asciiz	"\n"
+
+10)
+#merge sorted arrays
+
+
+.text
+.globl main
+
+main:
+li $v0, 4
+la $a0, msg1
+syscall
+
+li $v0, 5
+syscall
+move $t0, $v0
+
+li $t1, 4
+mult $t0, $t1
+mflo $t8       #arr1 size
+
+li $v0, 5
+syscall
+move $t2, $v0      
+
+li $t1, 4
+mult $t1, $t2
+mflo $t9                #arr2 size
+ 
+addi $t1, $0, 0
+
+read:
+li $v0, 5
+syscall
+move $t0, $v0
+sw $t0, arr1($t1)
+addi $t1, $t1, 4
+
+sub $t0, $t0, 1
+beq $t1, $t8, next1
+j read
+
+next1:
+addi $t0, $0, 0
+read1:
+li $v0, 5
+syscall
+move $t1, $v0
+sw $t1, arr2($t0)
+addi $t0, $t0, 4
+beq $t0, $t9, comp
+j read1
+
+comp:
+addi $t0, $0, 0
+addi $t1, $0, 0
+addi $t2, $0, 0
+loop1:
+lw $t3, arr1($t0)
+lw $t4, arr2($t1)
+
+slt $t5, $t3, $t4
+beq $t5, $0, add2
+
+sw $t3, arr3($t2)
+addi $t0, $t0, 4
+addi $t2, $t2, 4
+j f1
+
+add2:
+sw $t4, arr3($t2)
+addi $t1, $t1, 4
+addi $t2, $t2, 4
+
+f1:
+beq $t0, $t8, final2
+beq $t1, $t9, final1
+j loop1
+
+final1:
+lw $t3, arr1($t0)
+sw $t3, arr3($t2)
+addi $t0, $t0, 4
+addi $t2, $t2, 4
+beq $t0, $t8, end
+
+final2:
+lw $t4, arr2($t1)
+sw $t4, arr3($t2)
+addi $t1, $t1, 4
+addi $t2, $t2, 4
+beq $t0, $t9, end
+
+end:
+addi $t0, $0, 0
+print:
+lw $t1, arr3($t0)
+li $v0, 1
+move $a0, $t1
+syscall
+addi $t0, $t0, 4
+beq $t0, $t2, end2
+j print
+
+end2:
+li $v0, 10
+syscall
+
+.data
+arr1: .space 12
+arr2: .space 12
+arr3: .space 24
+msg1: .asciiz "enter"
+newline:   .asciiz	"\n"
+
+11)
+#find mode
+
+
+.text
+.globl main
+
+main:
+
+li $v0, 5
+syscall
+move $t0, $v0
+
+move $t9, $t0
+
+li $t1, 4
+mult $t1, $t0
+mflo $t8
+
+
+addi $t1, $0, 0
+
+read:
+li $v0, 5
+syscall
+move $t2, $v0
+sw $t2, array($t1)
+addi $t1, $t1, 4
+
+
+beq $t1, $t8, end
+j read
+
+end:
+addi $t1, $0, 100  #low
+addi $t2, $0, 0 #high
+
+addi $t4, $0, 0 #arr ind
+count_loop1:
+lw $t5, array($t4);
+addi $t3, $0, 0 #count of each elem
+
+addi $t6, $0, 0
+count_loop2:
+lw $t7, array($t6)
+beq $t5, $t7, inc
+j f
+inc:
+addi $t3, $t3, 1
+f:
+addi $t6, $t6, 4
+beq $t6, $t8, comp
+j count_loop2
+
+comp:
+li $t5, 0
+slt $t5, $t1, $t3
+beq $t5, $0, low
+
+f2:
+li $t5, 0
+slt $t5, $t3, $t2
+beq $t5, $0, high
+j f3
+
+low:
+move $t1, $t3
+j f2
+
+high:
+move $t2, $t3
+
+f3:
+addi $t4, $t4, 4
+beq $t4, $t8, next
+j count_loop1
+
+next:
+
+
+addi $t4, $0, 0 #arr ind
+count_loop11:
+lw $t5, array($t4);
+addi $t3, $0, 0 #count of each elem
+
+add $t6, $0, $t4
+count_loop22:
+lw $t7, array($t6)
+beq $t5, $t7, inc1
+j f11
+inc1:
+addi $t3, $t3, 1
+f11:
+addi $t6, $t6, 4
+beq $t6, $t8, comp2
+j count_loop22
+
+comp2:
+beq $t3, $t2, print
+j f33
+
+print:
+li $v0, 1
+move $a0, $t5
+syscall
+
+f33:
+addi $t4, $t4, 4
+beq $t4, $t8, next2
+j count_loop11
+
+
+next2:
+li $v0, 10
+syscall
+
+.data
+array: .space 40
+a: .space 4
+newline:   .asciiz	"\n"
+
+12)
+#sorting
+
+
+.text
+.globl main
+
+main:
+li $v0, 4
+la $a0, msg1
+syscall
+
+li $v0, 5
+syscall
+move $t0, $v0
+
+li $t1, 4
+mult $t0, $t1
+mflo $t8       #arr1 size
+
+addi $t0, $0, 0
+read:
+li $v0, 5
+syscall 
+move $t1, $v0
+sw $t1, arr($t0)
+addi $t0, $t0, 4
+beq $t0, $t8, next1
+j read
+
+next1:
+addi $t0, $0, 0
+loop1:
+lw $t1, arr($t0)
+
+add $t2, $0, $t0    #arr ind 2
+li $t6, 100
+loop2:
+lw $t3, arr($t2)
+
+li $t4, 0
+slt $t4, $t6, $t3
+beq $t4, $0, small
+j f1
+small:
+move $t6, $t3
+move $t7, $t2
+
+f1:
+addi $t2, $t2, 4
+beq $t2, $t8, out
+j loop2
+
+
+out:
+li $t4, 0
+slt $t4, $t1, $t6
+beq $t4, $0, swap
+j f2
+
+swap:
+sw $t1, arr($t7)
+sw $t6, arr($t0)
+
+f2:
+addi $t0, $t0, 4
+beq $t0, $t8, next2
+j loop1
+
+
+next2:
+addi $t0, $0, 0
+
+print:
+lw $t1, arr($t0)
+li $v0, 1
+move $a0, $t1
+syscall
+li $v0, 4
+la $a0, newline
+syscall
+
+addi $t0, $t0, 4
+beq $t0, $t8, end
+j print
+
+addi $t0, $t0, 4
+beq $t0, $t8, end
+j print
+
+
+
+end:
+li $v0, 10
+syscall
+
+.data
+arr: .space 120
+msg1: .asciiz "enter"
+newline:   .asciiz	"\n"
